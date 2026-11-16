@@ -7,7 +7,7 @@ export class DownloadMeterService {
   }
 
   private readonly _started: number;
-  private readonly _samples: { time: number; bytes: number }[];
+  private readonly _samples: { time: number, bytes: number }[];
   private _bytes = 0;
 
   record(bytes: number): void {
