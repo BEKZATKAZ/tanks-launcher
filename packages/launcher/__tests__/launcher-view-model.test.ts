@@ -7,6 +7,7 @@ import { LauncherViewModel } from "../src/view-models/launcher-view-model";
 
 function setup(patch: Partial<Snapshot> = {}) {
   const bridge = {
+    patchNotes: vi.fn(async () => "## Added\n- Feature"),
     command: vi.fn(async () => ({})),
     chooseFolder: vi.fn(async () => "/chosen")
   };
@@ -110,5 +111,62 @@ describe("Unity-style localization CSV", () => {
   it("supports commas, quotes, and multiline translations", () => {
     expect(parseCsv('Key,en\nmessage,"A comma, a ""quote""\nand a newline"\n'))
       .toEqual([["Key", "en"], ["message", 'A comma, a "quote"\nand a newline']]);
+  });
+});
+
+
+describe("patch notes view model", () => {
+  it("opens once for the confirmed operation version and survives completion", async () => {
+    const { model, state, bridge } = setup();
+    const operation = { id: state.operationId + 1, version: "selected" };
+    model.receive({ ...state, revision: 2, releaseOperation: operation });
+    expect(model.patchNotesOpen).toBe(true);
+    await Promise.resolve();
+    expect(bridge.patchNotes).toHaveBeenCalledWith(operation.version);
+    model.receive({ ...state, revision: 3, releaseOperation: operation });
+    expect(bridge.patchNotes).toHaveBeenCalledTimes(1);
+    expect(model.patchNotesBody).toContain("Feature");
+    model.closePatchNotes();
+    model.receive({ ...state, revision: 4, releaseOperation: operation });
+    expect(model.patchNotesOpen).toBe(false);
+  });
+
+  it("does not fetch for checking or verifying", () => {
+    const { model, state, bridge } = setup();
+    model.receive({ ...state, revision: 2, phase: "checking", targetVersion: "new" });
+    model.receive({ ...state, revision: 3, phase: "verifying" });
+    expect(bridge.patchNotes).not.toHaveBeenCalled();
+  });
+
+  it("ignores delayed responses after dismissal and newer operations", async () => {
+    const { model, state, bridge } = setup();
+    let resolve!: (body: string) => void;
+    bridge.patchNotes.mockImplementationOnce(() => new Promise<string>(done => { resolve = done; }));
+    model.receive({ ...state, revision: 2, releaseOperation: { id: 2, version: "a" } });
+    model.closePatchNotes();
+    resolve("old notes");
+    await Promise.resolve();
+    expect(model.patchNotesOpen).toBe(false);
+    expect(model.patchNotesBody).toBe("");
+    bridge.patchNotes.mockImplementationOnce(() => new Promise<string>(done => { resolve = done; }));
+    model.receive({ ...state, revision: 3, releaseOperation: { id: 3, version: "b" } });
+    model.receive({ ...state, revision: 4, releaseOperation: { id: 4, version: "c" } });
+    await Promise.resolve();
+    resolve("stale notes");
+    await Promise.resolve();
+    expect(model.patchNotesBody).toContain("Feature");
+  });
+
+  it("silently closes on empty notes or request errors", async () => {
+    const { model, state, bridge } = setup();
+    bridge.patchNotes.mockResolvedValueOnce("");
+    model.receive({ ...state, revision: 2, releaseOperation: { id: 2, version: "a" } });
+    await Promise.resolve();
+    expect(model.patchNotesOpen).toBe(false);
+    bridge.patchNotes.mockRejectedValueOnce(new Error("offline"));
+    model.receive({ ...state, revision: 3, releaseOperation: { id: 3, version: "b" } });
+    await Promise.resolve();
+    expect(model.patchNotesOpen).toBe(false);
+    expect(model.connectionError).toBe(false);
   });
 });

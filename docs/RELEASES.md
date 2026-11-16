@@ -113,3 +113,18 @@ their labels.
   Real-bucket install validation requires publishing the agreed manifests/files.
 - macOS/Linux native execution, ARM64 builds, macOS signing/notarization, and
   complete native workflow smoke tests remain unverified on target systems.
+## Patch notes
+
+Install and update operations expose their confirmed manifest version to the UI.
+The launcher requests that version's GitHub release body from
+`BEKZATKAZ/tank-game`, trying the exact tag first and a `v` prefix on 404.
+Patch notes are fetched independently of installation; missing, empty, malformed,
+or unreachable releases silently dismiss the dialog.
+
+The modal uses a 50% black backdrop and a centered gray container. Notes scroll
+while the title and Close button remain visible. Close, Escape, and backdrop
+clicks dismiss it without stopping installation. Markdown is sanitized before
+rendering. Added headings become localized New features; Changed and Removed
+sections are grouped under one Improvements heading per release; Fixed headings become Bug fixes. Entry text and
+unrecognized headings retain the release's original wording. Launcher strings
+are translated through the existing English/Russian/French CSV.

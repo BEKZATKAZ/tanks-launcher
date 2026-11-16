@@ -3,7 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
-  "dependencies": { "@tanks/core": "workspace:*", "@tanks/adapters": "workspace:*" },
-  "scripts": { "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json" }
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@tanks/adapters": "workspace:*",
+    "@tanks/core": "workspace:*",
+    "dompurify": "^3.4.18",
+    "marked": "^18.2.0"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^30.0.0",
+    "jsdom": "^31.0.1"
+  }
 }

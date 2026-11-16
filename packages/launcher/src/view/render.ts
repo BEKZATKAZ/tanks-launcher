@@ -1,3 +1,4 @@
+import { patchNotesHtml } from "../localization/patch-notes";
 import { languages } from "../localization";
 import type { LauncherViewModel } from "../view-models/launcher-view-model";
 
@@ -99,6 +100,22 @@ export function render(model: LauncherViewModel): void {
 
   if (model.destinationOpen === false && dialog.open) {
     dialog.close();
+    element("primary").focus();
+  }
+
+  const notes = element<HTMLDialogElement>("patch-notes-dialog");
+  const body = element("patch-notes-body");
+  const contentKey = JSON.stringify([model.patchNotesBody, model.language]);
+  if (body.dataset.contentKey !== contentKey) {
+    body.innerHTML = patchNotesHtml(model.patchNotesBody, key => model.t(key));
+    body.dataset.contentKey = contentKey;
+  }
+  element("patch-notes-loading").hidden = model.patchNotesBody.length > 0;
+  if (model.patchNotesOpen && notes.open === false) {
+    notes.showModal();
+  }
+  if (model.patchNotesOpen === false && notes.open) {
+    notes.close();
     element("primary").focus();
   }
 

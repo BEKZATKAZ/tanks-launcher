@@ -34,7 +34,7 @@ export class InstallationUseCase {
     this._control = control;
 
     state.update({ phase: "preparing", paused: false, error: undefined,
-      operationId: state.value.operationId + 1, progress: null,
+      operationId: state.value.operationId + 1, releaseOperation: undefined, progress: null,
       downloadBytesPerSecond: 0, totalBytes: undefined });
 
     try {
@@ -79,7 +79,10 @@ export class InstallationUseCase {
 
       state.pending = operation;
 
-      state.update({ pending: true, targetVersion: operation.manifest.version });
+      state.update({ pending: true, targetVersion: operation.manifest.version,
+        releaseOperation: operation.operation === "verify"
+          ? undefined
+          : { id: state.value.operationId, version: operation.manifest.version } });
 
       await new TransferService(this._disk, this._releases, this._clock).run(
         root, operation, control, (phase, progress, metrics) => {

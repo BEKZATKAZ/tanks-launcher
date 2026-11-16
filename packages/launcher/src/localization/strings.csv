@@ -48,3 +48,8 @@
 "megabytes","48","{value} MB","{value} МБ","{value} Mo"
 "gigabytes","49","{value} GB","{value} ГБ","{value} Go"
 "checking","50","Checking for updates","Проверка обновлений","Recherche de mises à jour"
+"whatsNew","51","What's new?","Что нового?","Quoi de neuf ?"
+"newFeatures","52","New features","Добавлено","Nouvelles fonctionnalités"
+"improvements","53","Improvements","Улучшено","Améliorations"
+"bugFixes","54","Bug fixes","Баг фиксы","Corrections de bugs"
+"loadingPatchNotes","55","Loading patch notes…","Загрузка списка изменений…","Chargement des notes de version…"

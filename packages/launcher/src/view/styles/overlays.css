@@ -109,7 +109,6 @@ dialog button:not(:disabled):hover {
   border: 1px solid #555;
   border-radius: 5px;
   padding: 10px;
-  font-family: system-ui, sans-serif;
 }
 
 .dialog-actions {
@@ -140,4 +139,33 @@ button.accent:not(:disabled):hover {
   .folder-row input {
     flex-basis: 100%;
   }
+}
+
+#patch-notes-dialog {
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+#patch-notes-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+#patch-notes-dialog::backdrop {
+  background: rgb(0 0 0 / 50%);
+}
+
+#patch-notes-body {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+#patch-notes-body pre {
+  overflow-x: auto;
+}
+
+#patch-notes-body a {
+  color: #b6d490;
 }

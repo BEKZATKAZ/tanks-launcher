@@ -5,6 +5,38 @@ import type { LauncherBridge } from "../ports/launcher-bridge";
 export class LauncherViewModel {
   constructor(private readonly _bridge: LauncherBridge) {}
 
+  patchNotesOpen = false;
+  patchNotesBody = "";
+  private _notesRequest = 0;
+  private _notesOperation?: number;
+
+  closePatchNotes(): void {
+    this.patchNotesOpen = false;
+    this._notesRequest++;
+    this.changed();
+  }
+
+  private async loadPatchNotes(version: string): Promise<void> {
+    const request = ++this._notesRequest;
+    this.patchNotesBody = "";
+    this.patchNotesOpen = true;
+    this.changed();
+    try {
+      const body = await this._bridge.patchNotes(version);
+      if (request !== this._notesRequest) {
+        return;
+      }
+      this.patchNotesBody = body ?? "";
+      this.patchNotesOpen = this.patchNotesBody.trim().length > 0;
+    }
+    catch {
+      if (request === this._notesRequest) {
+        this.patchNotesOpen = false;
+      }
+    }
+    this.changed();
+  }
+
   state?: Snapshot;
   destinationOpen = false;
   destination = "";
@@ -20,6 +52,11 @@ export class LauncherViewModel {
     }
 
     this.state = snapshot;
+    const operation = snapshot.releaseOperation;
+    if (operation !== undefined && operation.id !== this._notesOperation) {
+      this._notesOperation = operation.id;
+      void this.loadPatchNotes(operation.version);
+    }
     this.connectionError = false;
 
     this.changed();

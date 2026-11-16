@@ -14,6 +14,7 @@ const rpc = Electroview.defineRPC<LauncherRPC>({
 });
 
 const model = new LauncherViewModel({
+  patchNotes: version => rpc.request.patchNotes(version),
   command: command => rpc.request.command(command),
   chooseFolder: () => rpc.request.chooseFolder()
 });
@@ -146,4 +147,19 @@ render(model);
 void rpc.request.snapshot().then(snapshot => model.receive(snapshot)).catch(() => {
   model.connectionError = true;
   render(model);
+});
+
+const notesDialog = element<HTMLDialogElement>("patch-notes-dialog");
+element("close-patch-notes").addEventListener("click", () => model.closePatchNotes());
+notesDialog.addEventListener("cancel", event => {
+  event.preventDefault();
+  model.closePatchNotes();
+});
+notesDialog.addEventListener("click", event => {
+  const bounds = notesDialog.getBoundingClientRect();
+  if (event.target === notesDialog && (event.clientX < bounds.left
+    || event.clientX > bounds.right || event.clientY < bounds.top
+    || event.clientY > bounds.bottom)) {
+    model.closePatchNotes();
+  }
 });

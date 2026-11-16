@@ -16,6 +16,7 @@ describe("installation lifecycle", () => {
     const service = context.service();
     await service.initialize();
     await service.execute({ type: "install", destination: context.root });
+    expect(service.snapshot.releaseOperation).toEqual({ id: service.snapshot.operationId, version: first.version });
     expect(service.snapshot.installed?.version).toBe(first.version);
     expect(service.snapshot.error).toBeUndefined();
     expect((await context.settings.load()).destination).toBe(context.root);
@@ -28,6 +29,7 @@ describe("installation lifecycle", () => {
     const before = context.requests.length;
     await service.execute({ type: "install" });
     const requests = context.requests.slice(before).map(item => item.path);
+    expect(service.snapshot.releaseOperation).toEqual({ id: service.snapshot.operationId, version: next.version });
     expect(service.snapshot.installed?.version).toBe(next.version);
     expect(requests.some(path => path.endsWith("/unchanged.bin"))).toBe(false);
     expect(requests.some(path => path.endsWith("/added.bin"))).toBe(true);
@@ -36,6 +38,7 @@ describe("installation lifecycle", () => {
     await writeFile(join(context.root, "game.exe"), "corruption");
     const repairStart = context.requests.length;
     await service.execute({ type: "verify" });
+    expect(service.snapshot.releaseOperation).toBeUndefined();
     expect(await readFile(join(context.root, "game.exe"), "utf8")).toBe("updated game");
     expect(context.requests.slice(repairStart).map(item => item.path))
       .toEqual([`/${next.version}/windows-x64/game.exe`]);

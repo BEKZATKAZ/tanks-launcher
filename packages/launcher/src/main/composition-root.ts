@@ -2,7 +2,7 @@
 import { LauncherError, LauncherService, parseCommand } from "@tanks/core";
 import type { Architecture, Platform } from "@tanks/core";
 import {
-  NativeClockService, NativeInstallationService, NativeProcessService, NativeReleaseService,
+  NativePatchNotesService, NativeClockService, NativeInstallationService, NativeProcessService, NativeReleaseService,
   NativeSettingsService
 } from "@tanks/adapters";
 import { BrowserView, Utils } from "electrobun/main";
@@ -21,6 +21,8 @@ const service = new LauncherService(settings, disk,
   new NativeReleaseService(platform, architecture), new NativeProcessService(),
   new NativeClockService());
 
+const patchNotes = new NativePatchNotesService();
+
 let polling = false;
 let notifyTimer: ReturnType<typeof setTimeout> | undefined;
 let updateTitle: (() => void) | undefined;
@@ -29,6 +31,7 @@ export const rpc = BrowserView.defineRPC<LauncherRPC>({
   maxRequestTime: 30000,
   handlers: {
     requests: {
+      patchNotes: version => patchNotes.fetch(version),
       snapshot: () => service.snapshot,
       chooseFolder: async () => {
         const result = await Utils.openFileDialog({

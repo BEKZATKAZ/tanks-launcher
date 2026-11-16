@@ -5,6 +5,7 @@ import type { Language } from "./language";
 export interface Snapshot {
   revision: number;
   operationId: number;
+  releaseOperation?: { id: number, version: string };
   language: Language;
   destination?: string;
   defaultDestination: string;
