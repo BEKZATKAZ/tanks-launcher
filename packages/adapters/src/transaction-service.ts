@@ -143,7 +143,7 @@ export class TransactionService {
       if (process.platform !== "win32") {
         for (const file of manifest.files) {
           await chmod(await safePath(root, file.path),
-            file.executable ? 0o755 : 0o644);
+            file.path === manifest.executable ? 0o755 : 0o644);
         }
       }
 

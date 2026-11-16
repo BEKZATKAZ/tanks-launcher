@@ -7,7 +7,7 @@ function manifest(platform: Platform = "windows",
   return {
     schemaVersion: 1, version: "test-release", platform, architecture,
     executable: "game", workingDirectory: ".",
-    files: [{ path: "game", size: 0, sha256: "a".repeat(64), executable: true }]
+    files: [{ path: "game", size: 0, sha256: "a".repeat(64) }]
   };
 }
 

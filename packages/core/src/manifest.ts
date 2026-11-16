@@ -60,8 +60,6 @@ export function validateManifest(
       || Number.isSafeInteger(file.size) === false || file.size < 0
       || typeof file.sha256 !== "string"
       || /^[a-f0-9]{64}$/.test(file.sha256) === false
-      || (file.executable !== undefined
-        && typeof file.executable !== "boolean")
       || paths.has(file.path.toLowerCase())) {
       throw new LauncherError("manifest");
     }
@@ -87,10 +85,7 @@ export function validateManifest(
     || data.files.some(file => file.path === data.executable) === false
     || (data.workingDirectory !== "."
       && data.files.some(file => file.path.startsWith(
-        `${data.workingDirectory}/`)) === false)
-      || (platform !== "windows"
-        && data.files.find(file => file.path === data.executable)
-          ?.executable !== true)) {
+        `${data.workingDirectory}/`)) === false)) {
     throw new LauncherError("manifest");
   }
 

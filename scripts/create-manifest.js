@@ -57,9 +57,7 @@ async function walk(folder = "") {
       hash.update(chunk);
     }
 
-    files.push({ path, size: info.size, sha256: hash.digest("hex"),
-      executable: values.platform !== "windows"
-        && ((info.mode & 0o111) !== 0 || path === values.executable) });
+    files.push({ path, size: info.size, sha256: hash.digest("hex") });
   }
 }
 

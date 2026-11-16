@@ -20,5 +20,6 @@ it("generates a manifest accepted by the launcher for actual release files", asy
   ], { windowsHide: true });
   const manifest = validateManifest(JSON.parse(stdout), "test", "windows", "x64");
   expect(manifest.files[0].size).toBe(Buffer.byteLength("game data"));
+  expect(manifest.files[0]).not.toHaveProperty("executable");
   expect(manifest.executable).toBe("game.exe");
 });

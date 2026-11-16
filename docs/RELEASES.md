@@ -60,9 +60,8 @@ files and shared libraries.
 
 For macOS, publish a signed/notarized `.app` bundle as regular files and point
 `executable` to `Game.app/Contents/MacOS/Game`. Set `workingDirectory` to `.` or
-an existing directory inside the release. Unix executable files need
-`"executable": true`; the generator preserves executable permissions and marks
-the configured entry point executable. Produce each target on its native build
+an existing directory inside the release. The launcher marks the configured
+entry point executable on Unix. Produce each target on its native build
 system so signatures and permissions are correct.
 
 Enable HTTP byte ranges and stable strong ETags or Last-Modified validators for
