@@ -31,7 +31,10 @@ export class NativeProcessService implements ProcessService {
 
       await new Promise<void>((resolve, reject) => {
         const child = spawn(executable, [], {
-          cwd, detached: true, stdio: "ignore", windowsHide: true
+          cwd,
+          detached: true,
+          stdio: "ignore",
+          windowsHide: false
         });
 
         child.once("error", reject);
