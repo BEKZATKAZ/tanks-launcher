@@ -1,2 +1,2 @@
-export type Phase = "idle" | "preparing" | "installing" | "updating"
+export type Phase = "idle" | "checking" | "preparing" | "installing" | "updating"
   | "verifying" | "finishing";

@@ -48,6 +48,10 @@ export class LauncherViewModel {
       return "preparing";
     }
 
+    if (state.phase === "checking") {
+      return "checking";
+    }
+
     if (state.running) {
       return "stop";
     }

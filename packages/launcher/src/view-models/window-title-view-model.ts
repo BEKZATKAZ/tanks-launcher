@@ -3,6 +3,11 @@ import { text } from "../localization";
 
 export class WindowTitleViewModel {
   format(state: Snapshot): string {
+    if (state.phase === "checking") {
+      return text(state.language, "statusTitle")
+        .replace("{status}", text(state.language, "checking"));
+    }
+
     if (state.phase === "idle" && state.pending === false) {
       return "Launcher";
     }

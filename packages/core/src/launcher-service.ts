@@ -157,6 +157,14 @@ export class LauncherService {
   }
 
   private async check(): Promise<void> {
+    const state = this.state;
+    const wasBusy = state.busy;
+    const progress = state.value.progress;
+
+    state.busy = true;
+
+    state.update({ phase: "checking", progress: null, error: undefined });
+
     try {
       const targetVersion = await this._releases.latest();
 
@@ -166,6 +174,11 @@ export class LauncherService {
     }
     catch (error) {
       this.state.fail(error);
+    }
+    finally {
+      state.busy = wasBusy;
+
+      state.update({ phase: "idle", progress });
     }
   }
 }

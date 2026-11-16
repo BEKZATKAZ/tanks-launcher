@@ -39,6 +39,7 @@ describe("launcher view model", () => {
     [{ installed: { version: "old" } }, "play"],
     [{ installed: { version: "old" }, targetVersion: "next" }, "update"],
     [{ running: true }, "stop"],
+    [{ phase: "checking", running: true }, "checking"],
     [{ pending: true, paused: true }, "paused"],
     [{ phase: "updating", progress: 0.4 }, "updating"]
   ])("maps state %j to %s", (patch, action) => {

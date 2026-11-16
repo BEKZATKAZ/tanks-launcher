@@ -14,6 +14,11 @@ function state(patch: Partial<Snapshot> = {}): Snapshot {
 describe("window title", () => {
   const model = new WindowTitleViewModel();
 
+  it("shows checking without stale transfer progress or paused status", () => {
+    expect(model.format(state({ phase: "checking", language: "fr", paused: true })))
+      .toBe("Recherche de mises à jour — Launcher");
+  });
+
   it("places localized status before percentage, speed, and full game size", () => {
     expect(model.format(state())).toBe("Updating 50% — 8 Mbps / 2.4 GB");
     expect(model.format(state({ language: "ru", phase: "installing" })))
