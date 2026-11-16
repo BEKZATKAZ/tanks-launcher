@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "electrobun": ["./.hutch/devkit/api/sdks/main/index.ts"],
+      "electrobun/main": ["./.hutch/devkit/api/sdks/main/index.ts"],
+      "electrobun/main/*": [
+        "./.hutch/devkit/api/sdks/main/entries/*.ts",
+        "./.hutch/devkit/api/sdks/main/*.ts"
+      ],
+      "electrobun/view": ["./.hutch/devkit/api/browser/index.ts"],
+      "electrobun/rpc": ["./.hutch/devkit/api/sdks/main/entries/rpc.ts"],
+      "electrobun/browser/*": ["./.hutch/devkit/api/browser/*"]
+    },
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "lib": ["ESNext"],
+    "types": []
+  }
+}

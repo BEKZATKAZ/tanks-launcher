@@ -1,4 +1,10 @@
 # Logs
+# Electrobun generated toolchains and bundles
+.hutch/
+.cottontail-tmp/
+build/
+artifacts/
+
 logs
 *.log
 npm-debug.log*

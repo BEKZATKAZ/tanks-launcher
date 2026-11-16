@@ -1,0 +1,9 @@
+{
+  "name": "@tanks/adapters",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": { "@tanks/core": "workspace:*" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json" }
+}
