@@ -76,7 +76,7 @@ element("destination-dialog").addEventListener("cancel", () => {
 for (const type of ["browse", "verify", "uninstall", "check"] as const) {
   element(type).addEventListener("click", () => {
     void model.send({ type });
-    element(type === "check" ? "check" : "more").focus();
+    element("more").focus();
   });
 }
 
