@@ -1,0 +1,135 @@
+.action-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.main-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: #718c51;
+  border-radius: 7px;
+  height: 58px;
+  width: 350px;
+}
+
+#primary {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+  background: transparent;
+  padding: 0 22px;
+  text-align: left;
+  font-size: 1.1rem;
+}
+
+#primary:disabled {
+  opacity: 1;
+}
+
+#primary:not(:disabled):hover,
+#pause:not(:disabled):hover {
+  background: #ffffff1f;
+}
+
+.progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: #92b56b;
+  transition: width 120ms linear;
+}
+
+#percentage {
+  position: relative;
+  padding-right: 14px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+#pause {
+  position: relative;
+  align-self: stretch;
+  width: 48px;
+  flex-shrink: 0;
+  background: #0002;
+}
+
+#pause svg,
+#more svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  display: block;
+  margin: auto;
+}
+
+.more-container {
+  position: relative;
+}
+
+#more {
+  width: 48px;
+  height: 58px;
+  border-radius: 7px;
+  background: #303234;
+}
+
+#more:not(:disabled):hover {
+  background: #44484b;
+}
+
+#more-menu {
+  right: 0;
+  top: calc(100% + 8px);
+  text-align: left;
+}
+
+.version {
+  color: #b7baba;
+  min-height: 1em;
+  font-size: 0.8rem;
+  margin-top: 20px;
+}
+
+#error {
+  color: #ffb4a8;
+  font: 0.9rem/1.5 system-ui, sans-serif;
+}
+
+.text-button {
+  background: transparent;
+  color: #aab39e;
+  font-size: 0.8rem;
+  padding: 10px;
+}
+
+.text-button:not(:disabled):hover {
+  color: #d2e0c3;
+  background: #ffffff0a;
+  border-radius: 5px;
+}
+
+.indeterminate .progress-fill {
+  width: 35% !important;
+  animation: preparing 1.5s ease-in-out infinite;
+}
+
+@keyframes preparing {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill,
+  button {
+    transition: none;
+  }
+
+  .indeterminate .progress-fill {
+    animation: none;
+    width: 100% !important;
+    opacity: 0.3;
+  }
+}

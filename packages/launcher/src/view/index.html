@@ -8,8 +8,64 @@
     <script type="module" src="view.ts"></script>
   </head>
   <body>
+    <div class="language-picker" id="language-picker">
+      <button id="language-toggle" aria-haspopup="menu" aria-expanded="false">
+        <img id="selected-flag" alt="" width="30" height="20">
+        <span id="selected-language"></span>
+      </button>
+      <div id="language-menu" class="popover" role="menu" hidden></div>
+    </div>
     <main>
       <h1 class="game-title">T.A.N.K.S.</h1>
+      <div class="action-row">
+        <div class="main-control" id="main-control">
+          <div class="progress-fill" id="progress-fill"></div>
+          <button id="primary"><span id="action-label"></span></button>
+          <span id="percentage" aria-hidden="true"></span>
+          <button id="pause" hidden>
+            <svg id="pause-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="6" y="4" width="4" height="16" rx="1"/>
+              <rect x="14" y="4" width="4" height="16" rx="1"/>
+            </svg>
+            <svg id="resume-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden>
+              <path d="M7 4.5a1 1 0 0 1 1.5-.86l12 7.5a1 1 0 0 1 0 1.72l-12 7.5A1 1 0 0 1 7 19.5Z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="more-container" id="more-container">
+          <button id="more" aria-haspopup="menu" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="5" r="2"/>
+              <circle cx="12" cy="12" r="2"/>
+              <circle cx="12" cy="19" r="2"/>
+            </svg>
+          </button>
+          <div id="more-menu" class="popover" role="menu" hidden>
+            <button role="menuitem" id="browse" data-text="browse"></button>
+            <button role="menuitem" id="verify" data-text="verify"></button>
+            <button role="menuitem" id="uninstall" class="danger" data-text="uninstall"></button>
+          </div>
+        </div>
+      </div>
+      <div id="progress-announcement" class="sr-only" role="status"></div>
+      <p id="version" class="version"></p>
+      <p id="error" role="alert" hidden></p>
+      <button id="check" class="text-button" data-text="check"></button>
     </main>
+    <dialog id="destination-dialog" aria-labelledby="destination-title">
+      <form id="destination-form">
+        <h2 id="destination-title" data-text="destinationTitle"></h2>
+        <p id="recreate" data-text="recreate" hidden></p>
+        <label for="destination" data-text="destination"></label>
+        <div class="folder-row">
+          <input id="destination" type="text" required autocomplete="off" spellcheck="false">
+          <button type="button" id="choose-folder" data-text="choose"></button>
+        </div>
+        <div class="dialog-actions">
+          <button type="button" id="cancel-destination" data-text="cancel"></button>
+          <button type="submit" class="accent" data-text="confirmInstall"></button>
+        </div>
+      </form>
+    </dialog>
   </body>
 </html>
