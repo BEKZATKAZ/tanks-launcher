@@ -1,0 +1,101 @@
+name: Build tagged app
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Verify tag and run tests
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out tagged commit and branch history
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      # Tag pushes have no branch filter; check membership in main explicitly.
+      - name: Verify tagged commit belongs to main
+        shell: bash
+        run: |
+          if ! git merge-base --is-ancestor HEAD refs/remotes/origin/main; then
+            echo "::error::The tagged commit does not belong to main."
+            exit 1
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Set up pnpm from packageManager
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+
+  build:
+    name: Build ${{ matrix.target }}
+    needs: test
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: windows-x64
+            runner: windows-2025
+          - target: macos-x64
+            runner: macos-15-intel
+          - target: linux-x64
+            runner: ubuntu-24.04
+    steps:
+      - name: Check out tagged commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+
+      - name: Set up pnpm from packageManager
+        uses: pnpm/action-setup@v6
+        with:
+          cache: true
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            libgtk-3-dev libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev librsvg2-dev
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prepare Electrobun SDK
+        run: pnpm run prepare:electrobun
+
+      - name: Build app
+        run: pnpm run build:release
+
+      - name: Upload packaged app
+        uses: actions/upload-artifact@v7
+        with:
+          name: tanks-launcher-${{ matrix.target }}
+          path: artifacts/
+          if-no-files-found: error
+          compression-level: 0
