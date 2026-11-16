@@ -27,7 +27,7 @@ export function systemLanguage(): Language {
 export class NativeSettingsService implements SettingsService {
   constructor(private readonly _path = join(configDirectory(), "settings.json")) {}
 
-  readonly defaultDestination = join(homedir(), "Games", "T.A.N.K.S.");
+  readonly defaultDestination = join(homedir(), "Documents", "Games", "TANKS");
 
   async load(): Promise<Settings> {
     try {
