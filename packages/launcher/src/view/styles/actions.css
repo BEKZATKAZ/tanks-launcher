@@ -12,7 +12,7 @@
   background: #718c51;
   border-radius: 7px;
   height: 50px;
-  width: 180px;
+  width: 230px;
 }
 
 #primary {
@@ -20,7 +20,7 @@
   flex: 1;
   align-self: stretch;
   background: transparent;
-  padding: 0 22px;
+  padding: 0 18px;
   text-align: left;
   font-size: 1.1rem;
 }
@@ -43,7 +43,7 @@
 
 #percentage {
   position: relative;
-  padding-right: 14px;
+  padding-right: 10px;
   font-variant-numeric: tabular-nums;
   pointer-events: none;
 }
@@ -51,7 +51,7 @@
 #pause {
   position: relative;
   align-self: stretch;
-  width: 48px;
+  width: 40px;
   flex-shrink: 0;
   background: #0002;
 }
@@ -70,7 +70,7 @@
 }
 
 #more {
-  width: 48px;
+  width: 42px;
   height: 50px;
   border-radius: 7px;
   background: #303234;
