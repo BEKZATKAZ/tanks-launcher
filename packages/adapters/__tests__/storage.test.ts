@@ -1,4 +1,4 @@
-import { mkdir, readFile, symlink, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, symlink, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join, parse } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -55,5 +55,21 @@ describe("installation storage boundaries", () => {
     });
     await writeFile(join(context.temporary, "settings.json"), "broken JSON");
     await expect(context.settings.load()).rejects.toMatchObject({ code: "settings" });
+  });
+
+  it("preserves existing metadata and removes temporary files after write failure", async () => {
+    const path = join(context.temporary, "metadata.json");
+    const original = { language: "fr" };
+    const invalid: Record<string, unknown> = {};
+    invalid.circular = invalid;
+
+    await atomicJson(path, original);
+
+    const before = await readdir(context.temporary);
+
+    await expect(atomicJson(path, invalid)).rejects.toThrow();
+
+    expect(JSON.parse(await readFile(path, "utf8"))).toEqual(original);
+    expect(await readdir(context.temporary)).toEqual(before);
   });
 });

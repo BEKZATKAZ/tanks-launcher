@@ -66,17 +66,18 @@ export async function atomicJson(path: string, data: unknown): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
 
   const temporary = `${path}.${randomUUID()}.tmp`;
-  const handle = await open(temporary, "wx", 0o600);
 
   try {
-    await handle.writeFile(JSON.stringify(data));
-    await handle.sync();
-  }
-  finally {
-    await handle.close();
-  }
+    const handle = await open(temporary, "wx", 0o600);
 
-  try {
+    try {
+      await handle.writeFile(JSON.stringify(data));
+      await handle.sync();
+    }
+    finally {
+      await handle.close();
+    }
+
     await rename(temporary, path);
   }
   finally {
