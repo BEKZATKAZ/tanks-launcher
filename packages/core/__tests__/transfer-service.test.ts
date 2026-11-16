@@ -14,6 +14,7 @@ describe("transfer scheduling", () => {
     };
     let active = 0;
     let peak = 0;
+    const started: string[] = [];
     const concurrency = 2;
     const disk: InstallationService = {
       exists: async () => true, validateDestination: async root => root,
@@ -28,6 +29,7 @@ describe("transfer scheduling", () => {
       platform: "windows", architecture: "x64", latest: async () => "test",
       manifest: async () => manifest,
       download: async (_manifest, file, _target, _control, progress) => {
+        started.push(file.path);
         peak = Math.max(peak, ++active);
         progress(file.size / 2);
 
@@ -45,7 +47,8 @@ describe("transfer scheduling", () => {
     await new TransferService(disk, remote, clock, concurrency).run("root",
       { operation: "install", manifest }, new OperationControl(), report);
 
-    expect(peak).toBeLessThanOrEqual(concurrency);
+    expect(peak).toBe(Math.min(concurrency, files.length));
+    expect(started[0]).toBe(files.at(-1)!.path);
     expect(staged).toEqual(new Set(files.map(file => file.path)));
     expect(report).toHaveBeenCalledWith("installing", 1, expect.any(Object));
     expect(report).toHaveBeenLastCalledWith("verifying", 1);

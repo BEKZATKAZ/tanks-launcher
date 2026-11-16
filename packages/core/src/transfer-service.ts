@@ -10,7 +10,7 @@ export class TransferService {
     private readonly _disk: InstallationService,
     private readonly _releases: ReleaseService,
     private readonly _clock: ClockService,
-    private readonly _concurrency = 3
+    private readonly _concurrency = 6
   ) {}
 
   async run(
@@ -29,6 +29,8 @@ export class TransferService {
         required.push(file);
       }
     }
+
+    required.sort((left, right) => right.size - left.size);
 
     await this._disk.space(root, required.reduce((sum, file) =>
       sum + file.size * 2, 0));
@@ -124,7 +126,8 @@ export class TransferService {
 
     try {
       await Promise.all(Array.from(
-        { length: Math.max(1, this._concurrency) }, worker));
+        { length: Math.min(files.length, Math.max(1, this._concurrency)) },
+        worker));
     }
     finally {
       stop();
