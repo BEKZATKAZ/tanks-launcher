@@ -32,8 +32,8 @@
 
 .language-picker {
   position: fixed;
-  top: 22px;
-  right: 26px;
+  top: 10px;
+  right: 10px;
   z-index: 20;
 }
 
@@ -44,7 +44,7 @@
   gap: 7px;
   background: transparent;
   padding: 8px 12px;
-  min-width: 100px;
+  min-width: 60px;
   font-size: 0.9rem;
 }
 

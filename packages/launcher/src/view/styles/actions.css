@@ -11,8 +11,8 @@
   overflow: hidden;
   background: #718c51;
   border-radius: 7px;
-  height: 58px;
-  width: 350px;
+  height: 50px;
+  width: 180px;
 }
 
 #primary {
@@ -71,7 +71,7 @@
 
 #more {
   width: 48px;
-  height: 58px;
+  height: 50px;
   border-radius: 7px;
   background: #303234;
 }
