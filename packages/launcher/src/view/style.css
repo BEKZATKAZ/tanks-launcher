@@ -70,3 +70,12 @@ input:focus-visible {
   overflow: hidden;
   clip-path: inset(50%);
 }
+
+.copyright-notice {
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+}
